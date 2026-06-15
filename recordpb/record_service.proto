@@ -1,0 +1,413 @@
+// Copyright (c) 2022-2023, Zander Schwid & Co. LLC.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto3";
+
+import "google/api/annotations.proto";
+
+option go_package = "../recordpb";
+option java_multiple_files = true;
+option java_package = "com.codeallergy";
+option java_outer_classname = "RecordProtos";
+option objc_class_prefix = "RP";
+
+import "protoc-gen-openapiv2/options/annotations.proto";
+import "google/protobuf/empty.proto";
+
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+    info: {
+        title: "RecordService";
+        version: "1.0";
+        contact: {
+            name: "RecordService";
+            url: "https://github.com/codeallergy/record";
+            email: "zander@schwid.com";
+        };
+    };
+    schemes: HTTP;
+    schemes: HTTPS;
+    consumes: "application/json";
+    consumes: "application/octet-stream";
+    produces: "application/json";
+    produces: "application/octet-stream";
+};
+
+package record;
+
+//
+//  RecordService
+//
+
+service RecordService {
+
+    //
+    // Gets attributes counts
+    //
+    rpc GetCounts(TenantRequest) returns (Counts) {
+        option (google.api.http) = {
+            put: "/api/v1/counts"
+            body: "*"
+        };
+    }
+
+    //
+    // Quick record lookup request
+    //
+    rpc Lookup(LookupRequest) returns (RecordEntry) {
+        option (google.api.http) = {
+            put: "/api/v1/records/lookup"
+            body: "*"
+        };
+    }
+
+    //
+    // Search records by indexed attributes
+    //
+    rpc Search(SearchRequest) returns (stream RecordEntry) {
+        option (google.api.http) = {
+            put: "/api/v1/records/search"
+            body: "*"
+        };
+    }
+
+    //
+    // Get record with all attributes
+    //
+    rpc Get(GetRequest) returns (RecordEntry) {
+        option (google.api.http) = {
+            put: "/api/v1/records/get"
+            body: "*"
+        };
+    }
+
+    //
+    // Create record with new primary_key
+    //
+    rpc Create(CreateRequest) returns (CreateResponse) {
+        option (google.api.http) = {
+            put: "/api/v1/records/create"
+            body: "*"
+        };
+    }
+
+    //
+    // Delete record
+    //
+    rpc Delete(DeleteRequest) returns (google.protobuf.Empty) {
+        option (google.api.http) = {
+            put: "/api/v1/records/delete"
+            body: "*"
+        };
+    }
+
+    //
+    // Update record attributes
+    //
+    rpc Update(UpdateRequest) returns (google.protobuf.Empty) {
+        option (google.api.http) = {
+            put: "/api/v1/records/update"
+            body: "*"
+        };
+    }
+
+    //
+    // Scan records
+    //
+    rpc Scan(ScanRequest) returns (stream RecordEntry) {
+        option (google.api.http) = {
+            put: "/api/v1/records/scan"
+            body: "*"
+        };
+    }
+
+    //
+    // Allocate primary key range
+    //
+    rpc AddKeyRange(KeyRange) returns (google.protobuf.Empty) {
+        option (google.api.http) = {
+            put: "/api/v1/keys/add"
+            body: "*"
+        };
+    }
+
+    //
+    // Gets primary keys capacity
+    //
+    rpc GetKeyCapacity(TenantRequest) returns (KeyCapacity) {
+        option (google.api.http) = {
+            put: "/api/v1/keys/capacity"
+            body: "*"
+        };
+    }
+
+    //
+    // Get map value associated with the record
+    //
+    rpc MapGet(MapGetRequest) returns (MapEntry) {
+        option (google.api.http) = {
+            put: "/api/v1/records/map/get"
+            body: "*"
+        };
+    }
+
+    //
+    // Put map value associated with the record. Returns old value.
+    //
+    rpc MapPut(MapPutRequest) returns (MapValue) {
+        option (google.api.http) = {
+            put: "/api/v1/records/map/put"
+            body: "*"
+        };
+    }
+
+    //
+    // Remove map value associated with the record. Returns old value.
+    //
+    rpc MapRemove(MapRemoveRequest) returns (MapValue) {
+        option (google.api.http) = {
+            put: "/api/v1/records/map/remove"
+            body: "*"
+        };
+    }
+
+    //
+    // Scan all map key-value pairs
+    //
+    rpc MapRange(MapRangeRequest) returns (stream MapEntry) {
+        option (google.api.http) = {
+            put: "/api/v1/records/map/range"
+            body: "*"
+        };
+    }
+
+}
+
+message TenantRequest {
+    string tenant = 1;
+}
+
+message CountEntry {
+    string  name = 1;
+    int64   count = 2;
+}
+
+message Counts {
+    string  tenant = 1;
+    repeated CountEntry attributes = 2;
+    repeated CountEntry tags = 3;
+    repeated CountEntry columns = 4;
+}
+
+enum LookupType {
+    UNKNOWN_LOOKUP = 0;
+    BY_PRIMARY_KEY = 1;
+    BY_ATTRIBUTE = 2;
+    BY_TAG = 3;
+}
+
+message LookupRequest {
+    string tenant = 1;
+    LookupType lookup_type = 2;
+    string name = 3;
+    string key = 4;
+    bool   file_contents = 5;
+}
+
+message SearchRequest {
+    string tenant = 1;
+    LookupType lookup_type = 2;
+    string name = 3;
+    string key = 4;
+}
+
+message GetRequest {
+    string tenant = 1;
+    string primary_key = 2;
+    bool   file_contents = 4;
+}
+
+message CreateResponse {
+    string tenant = 1;
+    string primary_key = 2;
+}
+
+message KeyRange {
+    string tenant = 1;
+    int64  first_key = 2;
+    int64  last_key = 3;
+}
+
+message KeyCapacity {
+    int64  pending_keys = 1;
+}
+
+message CreateRequest {
+    string tenant = 1;
+    repeated AttributeEntry attributes = 5;
+    repeated string tags = 6;
+    repeated ColumnEntry columns = 7;
+    repeated FileEntry files = 8;
+}
+
+message DeleteRequest {
+    string tenant = 1;
+    string primary_key = 2;
+}
+
+enum UpdateType {
+    UNKNOWN_TYPE = 0;
+    MERGE = 1;
+    REPLACE = 2;
+}
+
+message UpdateRequest {
+    string tenant = 1;
+    string primary_key = 2;
+    UpdateType  update_type = 3;
+
+    repeated AttributeEntry attributes = 5;
+    repeated string tags = 6;
+    repeated ColumnEntry columns = 7;
+    repeated FileEntry files = 8;
+}
+
+message ScanRequest {
+    string    tenant = 1;
+    string    prefix = 2;
+    int32     offset = 3;
+    int32     limit = 4;
+}
+
+message MapGetRequest {
+    string  tenant = 1;
+    string  primary_key = 2;
+    string  map_key = 3;
+}
+
+message MapPutRequest {
+    string  tenant = 1;
+    string  primary_key = 2;
+    string  map_key = 3;
+    bytes   value = 4;
+    int32   ttl = 5;
+}
+
+message MapRemoveRequest {
+    string  tenant = 1;
+    string  primary_key = 2;
+    string  map_key = 3;
+}
+
+message MapValue {
+    bytes   value = 2;
+    bool    updated = 3;
+}
+
+message MapRangeRequest {
+    string    tenant = 1;
+    string    prefix = 2;
+    int32     offset = 3;
+    int32     limit = 4;
+}
+
+//
+// Persist
+//
+
+// all attributes are indexed in the form of 'name:value' -> record, list<record>
+message AttributeEntry {
+    string  name = 1;
+    string  value = 2;
+}
+
+// all tags are indexed in the form of 'tag' -> list<record>
+message TagEntry {
+    string tag = 1;
+}
+
+// keys stored inside the record, values stored inside the record
+message ColumnEntry {
+    string  name = 1;
+    bytes   value = 2;
+}
+
+// keys stored inside the record, values stored outside of the record
+message FileEntry {
+    string name = 1;
+    bytes  data = 2;
+    int32  size = 3;
+    int64  created_at = 4;
+}
+
+// keys stored outside of the record, values stored outside of the record
+message MapEntry {
+    string map_key = 1;
+    bytes  value = 2;
+    int32  ttl = 3;
+}
+
+// located in tenant:rec:primary_key
+message RecordEntry {
+    string tenant = 1;
+    string primary_key = 2;
+    int64  version = 3;
+
+    int64  created_at = 5;
+    int64  updated_at = 6;
+    int64  deleted_at = 7;
+
+    // all records are indexed by hash256(name:value)
+    repeated AttributeEntry attributes = 10;
+
+    // all records are indexed by tag
+    repeated string tags = 11;
+
+    // values stored inside the record
+    repeated ColumnEntry columns = 12;
+
+    // values stored outside of record
+    repeated FileEntry files = 13;
+}
+
+// located in range
+message KeyRangeEntry {
+    string   tenant = 1;
+    repeated  KeyRange  ranges = 2;
+}
+
+//
+// Raft Command
+//
+
+enum CommandOperation {
+    UNKNOWN_OP = 0;
+    CREATE_OP  = 1;
+    UPDATE_OP  = 2;
+    DELETE_OP  = 3;
+    ADD_RANGE_OP = 4;
+    MAP_PUT = 5;
+    MAP_REMOVE = 6;
+}
+
+message Command {
+    CommandOperation   operation = 1;
+    CreateRequest      create_req = 2;
+    UpdateRequest      update_req = 3;
+    DeleteRequest      delete_req = 4;
+    KeyRange           key_range = 5;
+    MapPutRequest      map_put_req = 6;
+    MapRemoveRequest   map_remove_req = 7;
+}
+
+

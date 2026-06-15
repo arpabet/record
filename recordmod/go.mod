@@ -1,0 +1,41 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// MIGRATION IN PROGRESS — this module does NOT build yet. See ../MIGRATION.md.
+// Remaining hands-on work before `go build` passes:
+//   1. Port main.go + sprintframework usages to the current arpabet builder API
+//      (role-based glue.Child(sprint.CoreRole, …); see arpabet/template/main.go).
+//   2. Resolve `github.com/codeallergy/raftgrpc` — it has no arpabet repo; its
+//      RaftCommand()/RaftGrpcServer() were folded into go.arpabet.com/sprint/raftmod.
+//   3. Finish the server-side Map* sub-API (handler + service + raft apply).
+//   4. Run `go mod tidy` to regenerate the indirect dependency block.
+// ─────────────────────────────────────────────────────────────────────────────
+
+module go.arpabet.com/record/recordmod
+
+go 1.23
+
+require (
+	go.arpabet.com/glue v1.5.0
+	go.arpabet.com/record/recordpb v0.0.0-00010101000000-000000000000
+	go.arpabet.com/sprint/raftapi v1.1.0
+	go.arpabet.com/sprint/raftmod v1.1.0
+	go.arpabet.com/sprint/raftpb v1.1.0
+	go.arpabet.com/sprint/sprint v1.1.0
+	go.arpabet.com/sprint/sprintframework v1.1.0
+	go.arpabet.com/store v1.1.0
+
+	// TODO(arpabet-migration): no arpabet equivalent; fold into sprint/raftmod.
+	github.com/codeallergy/raftgrpc v1.0.8
+
+	github.com/go-errors/errors v1.4.2
+	github.com/golang/protobuf v1.5.2
+	github.com/grpc-ecosystem/grpc-gateway/v2 v2.15.2
+	github.com/hashicorp/raft v1.3.11
+	github.com/pkg/errors v0.9.1
+	go.uber.org/zap v1.24.0
+	google.golang.org/genproto v0.0.0-20230303212802-e74f57abe488
+	google.golang.org/grpc v1.53.0
+	google.golang.org/protobuf v1.28.1
+)
+
+// recordpb is resolved locally within this monorepo (also covered by ../go.work).
+replace go.arpabet.com/record/recordpb => ../recordpb
