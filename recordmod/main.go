@@ -31,8 +31,9 @@
 //   • sprintcore.CoreScanner(…)       → sprintcore.CoreServices (inside CoreRole child)
 //   • sprintcore.BadgerStorageFactory → sprintcore.BadgerStoreFactory
 //   • sprintserver.ServerScanner(…)   → sprintserver.GrpcServerScanner(name) + beans
-//   • raftgrpc.RaftCommand()          → raftmod equivalent (raftgrpc folded into raftmod)
-//   • raftgrpc.RaftGrpcServer()       → raftmod equivalent
+//   • raftgrpc.RaftCommand()          → go.arpabet.com/sprint/raftgrpc.RaftCommand()  (ported module)
+//   • raftgrpc.RaftGrpcServer()       → go.arpabet.com/sprint/raftgrpc.RaftGrpcServer() (ported module)
+//   • raftmod.Scan                    → raftmod.RaftServices... (slice, not a scanner)
 // ─────────────────────────────────────────────────────────────────────────────
 package main
 
@@ -43,7 +44,7 @@ import (
 	"go.arpabet.com/record/recordmod/pkg/server"
 	"go.arpabet.com/record/recordmod/pkg/service"
 	"go.arpabet.com/sprint/raftmod"
-	"github.com/codeallergy/raftgrpc"
+	"go.arpabet.com/sprint/raftgrpc"
 	"github.com/pkg/errors"
 	"go.arpabet.com/sprint/sprintframework/sprintapp"
 	sprintclient "go.arpabet.com/sprint/sprintframework/sprintclient"

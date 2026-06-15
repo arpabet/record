@@ -3,8 +3,8 @@
 // Remaining hands-on work before `go build` passes:
 //   1. Port main.go + sprintframework usages to the current arpabet builder API
 //      (role-based glue.Child(sprint.CoreRole, …); see arpabet/template/main.go).
-//   2. Resolve `github.com/codeallergy/raftgrpc` — it has no arpabet repo; its
-//      RaftCommand()/RaftGrpcServer() were folded into go.arpabet.com/sprint/raftmod.
+//   2. raftgrpc — RESOLVED: ported to go.arpabet.com/sprint/raftgrpc (new module in
+//      the arpabet/sprint monorepo). Requires publishing a `raftgrpc/v1.1.0` tag there.
 //   3. Finish the server-side Map* sub-API (handler + service + raft apply).
 //   4. Run `go mod tidy` to regenerate the indirect dependency block.
 // ─────────────────────────────────────────────────────────────────────────────
@@ -17,14 +17,12 @@ require (
 	go.arpabet.com/glue v1.5.0
 	go.arpabet.com/record/recordpb v0.0.0-00010101000000-000000000000
 	go.arpabet.com/sprint/raftapi v1.1.0
+	go.arpabet.com/sprint/raftgrpc v1.1.0
 	go.arpabet.com/sprint/raftmod v1.1.0
 	go.arpabet.com/sprint/raftpb v1.1.0
 	go.arpabet.com/sprint/sprint v1.1.0
 	go.arpabet.com/sprint/sprintframework v1.1.0
 	go.arpabet.com/store v1.1.0
-
-	// TODO(arpabet-migration): no arpabet equivalent; fold into sprint/raftmod.
-	github.com/codeallergy/raftgrpc v1.0.8
 
 	github.com/go-errors/errors v1.4.2
 	github.com/golang/protobuf v1.5.2
