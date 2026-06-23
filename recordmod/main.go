@@ -45,7 +45,7 @@ import (
 	"go.arpabet.com/record/recordmod/pkg/service"
 	"go.arpabet.com/sprint/raftmod"
 	"go.arpabet.com/sprint/raftgrpc"
-	"github.com/pkg/errors"
+	"golang.org/x/xerrors"
 	"go.arpabet.com/sprint/sprintframework/sprintapp"
 	sprintclient "go.arpabet.com/sprint/sprintframework/sprintclient"
 	sprintcmd "go.arpabet.com/sprint/sprintframework/sprintcmd"
@@ -74,9 +74,9 @@ func doMain() (err error) {
 			case error:
 				err = v
 			case string:
-				err = errors.New(v)
+				err = xerrors.New(v)
 			default:
-				err = errors.Errorf("%v", v)
+				err = xerrors.Errorf("%v", v)
 			}
 		}
 	}()

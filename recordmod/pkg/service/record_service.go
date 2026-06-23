@@ -22,7 +22,7 @@ import (
 	"go.arpabet.com/store"
 	"go.arpabet.com/record/recordpb"
 	"go.arpabet.com/record/recordmod/pkg/api"
-	"github.com/go-errors/errors"
+	"golang.org/x/xerrors"
 	"go.uber.org/zap"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -239,7 +239,7 @@ func (t *implRecordService) doCreateRecord(ctx context.Context, entity *recordpb
 			if t.IgnoreDuplicateEntries {
 				continue
 			} else {
-				return errors.Errorf("duplicate file '%s' in the record", fileInfo.Name)
+				return xerrors.Errorf("duplicate file '%s' in the record", fileInfo.Name)
 			}
 		}
 		visited[fileInfo.Name] = true
@@ -262,7 +262,7 @@ func (t *implRecordService) doCreateRecord(ctx context.Context, entity *recordpb
 			if t.IgnoreDuplicateEntries {
 				continue
 			} else {
-				return errors.Errorf("duplicate attribute '%s' in the record", item.Name)
+				return xerrors.Errorf("duplicate attribute '%s' in the record", item.Name)
 			}
 		}
 		visited[item.Name] = true
@@ -278,7 +278,7 @@ func (t *implRecordService) doCreateRecord(ctx context.Context, entity *recordpb
 			if t.IgnoreDuplicateEntries {
 				continue
 			} else {
-				return errors.Errorf("duplicate tag '%s' in the record", tag)
+				return xerrors.Errorf("duplicate tag '%s' in the record", tag)
 			}
 		}
 		visited[tag] = true
@@ -339,7 +339,7 @@ func (t *implRecordService) UpdateRecord(ctx context.Context, request *recordpb.
 			if t.IgnoreDuplicateEntries {
 				continue
 			} else {
-				return nil, errors.Errorf("duplicate attribute '%s' in the record", item.Name)
+				return nil, xerrors.Errorf("duplicate attribute '%s' in the record", item.Name)
 			}
 		}
 		requestAttributes[item.Name] = true
@@ -380,7 +380,7 @@ func (t *implRecordService) UpdateRecord(ctx context.Context, request *recordpb.
 					return status, err
 				}
 			default:
-				return status, errors.Errorf("unknown update type '%s'", request.UpdateType.String())
+				return status, xerrors.Errorf("unknown update type '%s'", request.UpdateType.String())
 
 			}
 
@@ -400,7 +400,7 @@ func (t *implRecordService) UpdateRecord(ctx context.Context, request *recordpb.
 			if t.IgnoreDuplicateEntries {
 				continue
 			} else {
-				return nil, errors.Errorf("duplicate tag '%s' in the record", tag)
+				return nil, xerrors.Errorf("duplicate tag '%s' in the record", tag)
 			}
 		}
 		requestTags[tag] = true
@@ -429,7 +429,7 @@ func (t *implRecordService) UpdateRecord(ctx context.Context, request *recordpb.
 					return status, err
 				}
 			default:
-				return status, errors.Errorf("unknown update type '%s'", request.UpdateType.String())
+				return status, xerrors.Errorf("unknown update type '%s'", request.UpdateType.String())
 			}
 
 		}
@@ -447,7 +447,7 @@ func (t *implRecordService) UpdateRecord(ctx context.Context, request *recordpb.
 			if t.IgnoreDuplicateEntries {
 				continue
 			} else {
-				return nil, errors.Errorf("duplicate column '%s' in the record", item.Name)
+				return nil, xerrors.Errorf("duplicate column '%s' in the record", item.Name)
 			}
 		}
 		requestColumns[item.Name] = true
@@ -475,7 +475,7 @@ func (t *implRecordService) UpdateRecord(ctx context.Context, request *recordpb.
 			if t.IgnoreDuplicateEntries {
 				continue
 			} else {
-				return nil, errors.Errorf("duplicate file '%s' in the record", item.Name)
+				return nil, xerrors.Errorf("duplicate file '%s' in the record", item.Name)
 			}
 		}
 		requestFiles[item.Name] = true
@@ -530,7 +530,7 @@ func (t *implRecordService) UpdateRecord(ctx context.Context, request *recordpb.
 				}
 
 			default:
-				return status, errors.Errorf("unknown update type '%s'", request.UpdateType.String())
+				return status, xerrors.Errorf("unknown update type '%s'", request.UpdateType.String())
 
 			}
 
@@ -629,7 +629,7 @@ func (t *implRecordService) AddKeyRange(ctx context.Context, in *recordpb.KeyRan
 	status = new(raftpb.Status)
 
 	if in.LastKey < in.FirstKey {
-		return status, errors.Errorf("invalid key range %s", in.String())
+		return status, xerrors.Errorf("invalid key range %s", in.String())
 	}
 
 	ctx = t.TransactionalManager.BeginTransaction(ctx, false)

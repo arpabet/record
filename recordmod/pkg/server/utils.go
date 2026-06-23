@@ -21,7 +21,7 @@ import (
 	"go.arpabet.com/record/recordpb"
 	"github.com/golang/protobuf/proto"
 	"github.com/hashicorp/raft"
-	"github.com/pkg/errors"
+	"golang.org/x/xerrors"
 	"go.uber.org/zap"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -68,9 +68,9 @@ func (t *implAPIServer) doAuthorized(ctx context.Context, methodName string, cb 
 			case error:
 				err = v
 			case string:
-				err = errors.New(v)
+				err = xerrors.New(v)
 			default:
-				err = errors.Errorf("%v", v)
+				err = xerrors.Errorf("%v", v)
 			}
 		}
 
@@ -90,7 +90,7 @@ func (t *implAPIServer) wrapError(err error, method, username string) error {
 	issue := err.Error()
 	if strings.HasPrefix(issue, "nowrap:") {
 		issue = strings.TrimSpace(strings.TrimPrefix(issue, "nowrap:"))
-		return errors.New(issue)
+		return xerrors.New(issue)
 	}
 	message := "internal error"
 	if strings.Contains("concurrent transaction", issue) {
@@ -141,7 +141,7 @@ func (t *implAPIServer) applyCommand(ctx context.Context, r *raft.Raft, cmd *rec
 		return r.Status, r.Err
 	}
 
-	return nil, errors.Errorf("invalid raft response %v", resp)
+	return nil, xerrors.Errorf("invalid raft response %v", resp)
 
 }
 

@@ -18,7 +18,7 @@ import (
 	"context"
 	"crypto/tls"
 	"go.arpabet.com/sprint/raftpb"
-	"github.com/pkg/errors"
+	"golang.org/x/xerrors"
 	"google.golang.org/protobuf/types/known/emptypb"
 	"strings"
      _ "go.arpabet.com/grpc-multi-resolver"
@@ -34,13 +34,13 @@ func NewClient(ctx context.Context, commaSeparatedEndpoints, token string, tlsCo
 	}
 
 	if len(conf.ServerList) == 0 {
-		return nil, errors.New("no raft servers found")
+		return nil, xerrors.New("no raft servers found")
 	}
 
 	switch len(conf.ServerList) {
 
 	case 0:
-		return nil, errors.New("no raft servers found")
+		return nil, xerrors.New("no raft servers found")
 
 	case 1:
 

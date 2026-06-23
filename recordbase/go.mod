@@ -4,11 +4,11 @@ go 1.25.0
 
 require (
 	github.com/grpc-ecosystem/go-grpc-middleware v1.3.0
-	github.com/pkg/errors v0.9.1
 	go.arpabet.com/glue v1.5.0
 	go.arpabet.com/record/recordpb v1.0.3
 	go.arpabet.com/sprint/raftpb v1.1.0
 	go.uber.org/atomic v1.10.0
+	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1
 	google.golang.org/grpc v1.53.0
 	google.golang.org/protobuf v1.36.11
 )

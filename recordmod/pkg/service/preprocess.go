@@ -16,7 +16,7 @@ package service
 
 import (
 	"go.arpabet.com/record/recordpb"
-	"github.com/go-errors/errors"
+	"golang.org/x/xerrors"
 	"strings"
 )
 
@@ -88,7 +88,7 @@ func NormalizeFiles(files []*recordpb.FileEntry, skipOnUnknown bool) ([]*recordp
 				out = append(out, file)
 			}
 		} else if newName != file.Name  {
-			return nil, errors.Errorf("file name has spaces '%v' on position %d", file.Name, i)
+			return nil, xerrors.Errorf("file name has spaces '%v' on position %d", file.Name, i)
 		}
 
 	}
@@ -132,7 +132,7 @@ func NormalizePathField(field string, skipOnUnknown bool) (string, error) {
 			continue
 		}
 
-		return "", errors.Errorf("unknown character '%v' in string '%s' on position %d", ch, field, i)
+		return "", xerrors.Errorf("unknown character '%v' in string '%s' on position %d", ch, field, i)
 	}
 
 	return out.String(), nil

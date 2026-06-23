@@ -22,7 +22,7 @@ import (
 	"go.arpabet.com/record/recordpb"
 	"go.arpabet.com/record/recordmod/pkg/api"
 	"github.com/hashicorp/raft"
-	"github.com/pkg/errors"
+	"golang.org/x/xerrors"
 	"go.uber.org/zap"
 	"google.golang.org/protobuf/proto"
 	"io"
@@ -87,7 +87,7 @@ func (t *implRaftService) doApplyCommand(ctx context.Context, cmd *recordpb.Comm
 	default:
 		return &raftpb.Status{
 			Updated: false,
-		}, errors.Errorf("unknown command %s", cmd.Operation.String())
+		}, xerrors.Errorf("unknown command %s", cmd.Operation.String())
 	}
 }
 

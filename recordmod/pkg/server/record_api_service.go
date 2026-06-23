@@ -17,7 +17,7 @@ package server
 import (
 	"context"
 	"go.arpabet.com/record/recordpb"
-	"github.com/go-errors/errors"
+	"golang.org/x/xerrors"
 	"github.com/hashicorp/raft"
 	"google.golang.org/protobuf/types/known/emptypb"
 )
@@ -46,7 +46,7 @@ func (t *implAPIServer) Lookup(ctx context.Context, req *recordpb.LookupRequest)
 			entry, err = t.UserService.LookupRecord(ctx, req.Tenant, req.Name, req.Key, req.FileContents)
 			return err
 		default:
-			return errors.Errorf("unknown lookup type '%s'", req.LookupType.String())
+			return xerrors.Errorf("unknown lookup type '%s'", req.LookupType.String())
 		}
 
 	})

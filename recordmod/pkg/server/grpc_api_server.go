@@ -25,7 +25,7 @@ import (
 	"go.arpabet.com/record/recordpb"
 	"go.arpabet.com/record/recordmod/pkg/api"
 	"go.arpabet.com/record/recordmod/pkg/pb"
-	"github.com/pkg/errors"
+	"golang.org/x/xerrors"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
@@ -98,7 +98,7 @@ func (t *implAPIServer) PostConstruct() error {
 	opts = append(opts, grpc.WithTransportCredentials(tlsCredentials))
 
 	if t.GrpcAddress == "" {
-		return errors.New("property 'api-grpc-server.listen-address' is empty")
+		return xerrors.New("property 'api-grpc-server.listen-address' is empty")
 	}
 
 	recordpb.RegisterRecordServiceHandlerFromEndpoint(context.Background(), api, t.GrpcAddress, opts)
