@@ -14,14 +14,14 @@ module go.arpabet.com/record/recordmod
 go 1.23
 
 require (
-	go.arpabet.com/glue v1.5.0
+	go.arpabet.com/glue v1.5.1
 	go.arpabet.com/record/recordpb v0.0.0-00010101000000-000000000000
-	go.arpabet.com/sprint/raftapi v1.1.0
-	go.arpabet.com/sprint/raftgrpc v1.1.0
-	go.arpabet.com/sprint/raftmod v1.1.0
-	go.arpabet.com/sprint/raftpb v1.1.0
-	go.arpabet.com/sprint/sprint v1.1.0
-	go.arpabet.com/sprint/sprintframework v1.1.0
+	go.arpabet.com/sprint v1.2.0
+	go.arpabet.com/sprint/framework v1.2.0
+	go.arpabet.com/sprint/raftapi v1.2.0
+	go.arpabet.com/sprint/raftgrpc v1.2.0
+	go.arpabet.com/sprint/raftmod v1.2.0
+	go.arpabet.com/sprint/raftpb v1.2.0
 	go.arpabet.com/store v1.1.0
 
 	github.com/golang/protobuf v1.5.2

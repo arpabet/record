@@ -1,7 +1,7 @@
-go 1.25.0
+go 1.25.8
 
 use (
-	./recordpb
 	./recordbase
-	// ./recordmod — re-enable once the framework port compiles (see MIGRATION.md)
+	./recordpb
+// ./recordmod — re-enable once the framework port compiles (see MIGRATION.md)
 )

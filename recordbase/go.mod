@@ -1,32 +1,37 @@
 module go.arpabet.com/record/recordbase
 
-go 1.25.0
+go 1.25.8
 
 require (
-	github.com/grpc-ecosystem/go-grpc-middleware v1.3.0
-	go.arpabet.com/glue v1.5.0
+	github.com/grpc-ecosystem/go-grpc-middleware v1.4.0
+	go.arpabet.com/glue v1.5.1
 	go.arpabet.com/record/recordpb v1.0.3
-	go.arpabet.com/sprint/raftpb v1.1.0
-	go.uber.org/atomic v1.10.0
-	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1
-	google.golang.org/grpc v1.53.0
+	go.arpabet.com/sprint/raftpb v1.2.0
+	go.uber.org/atomic v1.11.0
+	golang.org/x/xerrors v0.0.0-20240903120638-7835f813f4da
+	google.golang.org/grpc v1.81.1
 	google.golang.org/protobuf v1.36.11
 )
 
-require github.com/BurntSushi/toml v1.6.0 // indirect
+require (
+	github.com/BurntSushi/toml v1.6.0 // indirect
+	google.golang.org/genproto/googleapis/api v0.0.0-20260622175928-b703f567277d // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20260622175928-b703f567277d // indirect
+)
 
 require (
-	github.com/golang/protobuf v1.5.4 // indirect
-	github.com/grpc-ecosystem/grpc-gateway/v2 v2.15.2 // indirect
-	github.com/kr/pretty v0.3.0 // indirect
-	github.com/rogpeppe/go-internal v1.9.0 // indirect
-	go.arpabet.com/grpc-multi-resolver v1.3.0
-	golang.org/x/net v0.30.0 // indirect
+	github.com/grpc-ecosystem/grpc-gateway/v2 v2.29.0 // indirect
+	go.arpabet.com/grpc-multi-resolver v1.3.1
+	golang.org/x/net v0.56.0 // indirect
 	golang.org/x/sys v0.46.0 // indirect
-	golang.org/x/text v0.19.0 // indirect
-	google.golang.org/genproto v0.0.0-20230303212802-e74f57abe488 // indirect
-	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
+	golang.org/x/text v0.38.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 
 replace go.arpabet.com/record/recordpb => ../recordpb
+
+// Pin the monolithic genproto to its post-split version so its (now-removed)
+// googleapis/api and googleapis/rpc packages don't clash with the split modules
+// that grpc v1.81 / grpc-gateway v2.29 require. Older deps (e.g. raftpb) still
+// request a pre-split genproto, which would otherwise reintroduce the ambiguity.
+replace google.golang.org/genproto => google.golang.org/genproto v0.0.0-20260622175928-b703f567277d

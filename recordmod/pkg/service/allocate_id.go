@@ -16,7 +16,7 @@ package service
 
 import (
 	"context"
-	"go.arpabet.com/sprint/sprintframework/sprintutils"
+	"go.arpabet.com/sprint/framework/sprintutils"
 	"go.arpabet.com/record/recordpb"
 )
 
